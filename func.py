@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import sklearn
 from sklearn.feature_extraction.text import CountVectorizer
 
+from tqdm import tqdm
 
 def take_arg(num):
     '''
@@ -36,12 +37,24 @@ def read_bin(filename):
 
     read the bin file and print out the shape
     '''
-    print("sanity check....")
-    x = np.fromfile(filename, dtype=int)
-    width = int(x.shape[0] /3)
+    x = np.fromfile(filename, dtype='int32')
+    width = int(x.shape[0]/3)
     x = x.reshape(width,3)
     print(x.shape)
     return x
+
+def read_csv(filename):
+    '''
+    @param: string filename -> "test.csv"
+    @return: np array
+
+    read in csv files
+    '''
+    my_data = pd.read_csv(filename)
+    my_data = my_data.values
+    # my_data = my_data.astype(int)
+    print(my_data.shape)
+    return my_data
 
 def most_common_frequency(inputlist):
     '''
@@ -149,6 +162,7 @@ def csv_to_bin(csv_name, bin_name):
 
     read in csv file from disk and save it as bin file
     '''
+    print(csv_name, " changing csv to bin...")
     my_data = pd.read_csv(csv_name)
     my_data = my_data.values
     my_data = my_data.astype(int)
@@ -156,7 +170,7 @@ def csv_to_bin(csv_name, bin_name):
     my_data.tofile(bin_name)
     print("finished saving bin to disk.")
 
-def np_to_bin(indata, outname):
+def todisk_bin(indata, outname):
     '''
     @param: np array indata
             string bin_name -> "out_bookdata_bc"
@@ -164,6 +178,7 @@ def np_to_bin(indata, outname):
 
     pass a numpy array and save it as bin file
     '''
+    print("save np to bin...", )
     indata = np.array(indata, dtype=np.int32) #4 bits int
     print("writing np array to bin...",indata.shape)
     indata.tofile(outname+".bin")
@@ -172,7 +187,7 @@ def np_to_bin(indata, outname):
     # check = np.fromfile(outname+".bin", dtype='int32')
     # print(check[0:100])
 
-def todist_csv(d, name):
+def todisk_csv(d, name):
     '''
     @param: np array d
             string bin_name -> "out_bookdata_bc"
@@ -199,7 +214,7 @@ def extract_less_freq(indata, target0, target1, label):
     outdata = np.zeros(indata.shape) #initialize a np array with same size as the original rating file .. TODO: it's not cpp pointers... need to dynamic allocate the size..
     # print("now comparing...",outdata.shape, len(target0), len(target1))
     
-    for i in range(indata_len):
+    for i in tqdm(range(indata_len)):
         #iterate all ratings, and see if there's a match
         search_str0 = str(indata[i][0]) # get the users see if it's in the not-freq users list
         search_str1 = str(indata[i][1]) # get the products see if it's in the not-freq products list
@@ -208,14 +223,13 @@ def extract_less_freq(indata, target0, target1, label):
         else:
             #keep the freq user data 
             outdata[i] = indata[i]
-        if(i % 1000 == 0): 
-            print(i)
         # if(i > 10):
         #     break
     # print("finish extracted...",outdata.shape, outdata[0:100])
     outdata = rm_zeros(outdata) #TODO: maybe only get the index...
-    todist_csv(outdata, "dataset/extracted/extracted_"+str(label)) #save the file now locally
-    csv_to_bin(outdata, "dataset/extracted/extracted_"+str(label))
+    todisk_csv(outdata, "dataset/extracted/extracted_"+str(label)) #save the file now locally
+    todisk_bin(outdata, "dataset/extracted/extracted_"+str(label))
+    
     return outdata
 
 def single_freq_threshold(inputlist, thresh):
@@ -328,8 +342,8 @@ def filterout(original, filepath, label):
     # Z = np.vstack(row for row in X if row not in Y)
     Z = setdiff2d(X,Y)
     print(X.shape, Y.shape, Z.shape)
-    todist_csv(Z, "dataset/ml-1m/seg/extracted_"+str(label))
-    csv_to_bin(Z, "dataset/ml-1m/seg/extracted_"+str(label))
+    todisk_csv(Z, "dataset/ml-1m/seg/extracted_"+str(label))
+    todisk_bin(Z, "dataset/ml-1m/seg/extracted_"+str(label))
 
 def reordering(indata):
     '''
@@ -367,18 +381,19 @@ def reordering(indata):
     print(np.amin(out), np.amax(out))
     out = np.array(out, dtype=np.int32)
     print(out)
-    csv_to_bin(out, "dataset/reorder")
-    todist_csv(out, "dataset/reorder")
+    todisk_bin(out, "dataset/reorder")
+    todisk_csv(out, "dataset/reorder")
   
-def cal_sparsity(filepath):
+def cal_sparsity(my_data):
     '''
-    @param: string filepath -> "dataset/movielen" 
+    @param: np 2d array mydata
 
     read in user/product/rating  
     calculate and print the spacity of the input bin file
     '''
-    my_data = np.fromfile(filepath+".bin", dtype='int32')
-    my_data = my_data.reshape(int(my_data.shape[0]/3), 3)
+    # my_data = np.fromfile(filepath+".bin", dtype='int32')
+    # my_data = my_data.reshape(int(my_data.shape[0]/3), 3)
+
     users = my_data[:,0]
     products = my_data[:,1]
     set1 = set(users)
@@ -390,7 +405,7 @@ def cal_sparsity(filepath):
     denominator = set1_len*set2_len
     sparsity = (1.0 - (numerator*1.0)/denominator)*100
     print("data len: ",numerator, " distinct users: ", set1_len, " distinct products: ", set2_len,)
-    print("The ratings dataframe is ", "%.2f" % sparsity + "% empty.")
+    print("The ratings dataframe is ", "%.4f" % sparsity + "% empty.")
 
 def extract_denser(filepath, thresh, label):
     '''
@@ -417,7 +432,24 @@ def extract_denser(filepath, thresh, label):
     users_notfreq = single_freq_threshold(users_freq, thresh)
     print("now mapping...")
     out = extract_less_freq(my_data, products_notfreq, users_notfreq,label)
+    
     return out
+
+def read_dat(fname):
+    '''
+    @param: string fname -> "test.dat"
+    @return: np 2d array
+    '''
+    data = []
+    for line in open(fname, 'r'):
+        item = line.rstrip()
+        item = item.split("::")
+        item = item[:3]
+        item = [int(item[i])  for i in range(0, len(item))]
+        data.append(item)
+    np_data  = np.array(data, dtype="int32")
+    return np_data
+
 
 def dat_to_csv_bin(fname):
     '''
@@ -434,8 +466,8 @@ def dat_to_csv_bin(fname):
         data.append(item)
 
     np_data  = np.array(data, dtype="int32")
-    todist_csv(np_data, "dataset/ml-1m/ml-1m")
-    csv_to_bin(np_data, "dataset/ml-1m/ml-1m")
+    todisk_csv(np_data, "dataset/ml-1m/ml-1m")
+    todisk_bin(np_data, "dataset/ml-1m/ml-1m")
     print(np_data.shape)
 
 def read_bc_str_ratings(filename):
@@ -610,13 +642,16 @@ def delete_extra_col(filename):
     my_data = my_data.astype(int)
     return my_data
 
-def read_npz():
+def read_npz(filename):
     '''
+    @param: string filename -> "newdata/ml_20m/trainx16x32_1.npz"
     read npz file
     '''
-    dirc = "newdata/ml_20m/"
-    datain = np.load(dirc+"trainx16x32_1.npz")
+    # dirc = "newdata/ml_20m/"
+    # datain = np.load(dirc+"trainx16x32_1.npz")
+    datain = np.load(filename)
     datain = datain.f.arr_0
     print(datain.shape)
+    return datain
 
 
