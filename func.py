@@ -20,6 +20,14 @@ import sklearn
 from sklearn.feature_extraction.text import CountVectorizer
 
 
+def take_arg(num):
+    '''
+    return a list of command arguments
+    '''
+    arglist = sys.argv
+    # if(len(arglist) > num):
+    return arglist[1:]
+
 def read_bin(filename):
     '''
     @param: string filename -> "dataset/data.bin"
@@ -200,7 +208,7 @@ def extract_less_freq(indata, target0, target1, label):
         else:
             #keep the freq user data 
             outdata[i] = indata[i]
-        if(i % 10000 == 0): 
+        if(i % 1000 == 0): 
             print(i)
         # if(i > 10):
         #     break
@@ -403,10 +411,11 @@ def extract_denser(filepath, thresh, label):
     #findout the frequency of each one
     products_freq = most_common_frequency(products)
     users_freq = most_common_frequency(users)
+    print("freq found.")
     #get the less frequency item that will be filtered out later
     products_notfreq = single_freq_threshold(products_freq, thresh)
     users_notfreq = single_freq_threshold(users_freq, thresh)
-
+    print("now mapping...")
     out = extract_less_freq(my_data, products_notfreq, users_notfreq,label)
     return out
 
