@@ -2,7 +2,7 @@
 some data processing tools
 see the function comments for specifics
 
-pip3 install pandas numpy scipy matplotlib sklearn 
+pip3 install pandas numpy scipy matplotlib sklearn tqdm
 Aug 21, 19
 '''
 
@@ -20,6 +20,8 @@ import sklearn
 from sklearn.feature_extraction.text import CountVectorizer
 
 from tqdm import tqdm
+import multiprocessing as mp
+import time
 
 def take_arg(num):
     '''
@@ -198,6 +200,83 @@ def todisk_csv(d, name):
     d = np.array(d, dtype=np.int32)
     np.savetxt(name+".csv", d, delimiter=",",fmt='%i')
 
+def split_dataset(indata, corenum):
+    '''
+    @param: np 2d array indata
+            int corenum -> 4
+
+    partition the np array into n parts 
+    '''
+    out = np.array_split(indata, corenum)
+    return out
+
+def match_freq(indata,target0,target1,outdata):
+    '''
+    created only for function extract_less_freq() to run in parallel
+    '''
+    indata_len = indata.shape[0]
+    for i in tqdm(range(indata_len)):
+        #iterate all ratings, and see if there's a match
+        search_str0 = str(indata[i][0]) # get the users see if it's in the not-freq users list
+        search_str1 = str(indata[i][1]) # get the products see if it's in the not-freq products list
+        if(search_str0 in target0) or (search_str1 in target1):
+            pass #coz the input list is inactive-users... 
+        else:
+            #keep the freq user data 
+            outdata[i] = indata[i]
+    return outdata
+
+def match_freq2(i, indata,target0,target1,outdata):
+    '''
+    @param: i is the thread num
+    created only for function extract_less_freq() to run in parallel
+    '''
+    text = "progresser #{:02d}".format(i)
+    progress = tqdm(
+        total=indata.shape[0],
+        position=i,
+        desc=text,
+    )
+    indata_len = indata.shape[0]
+    for i in range(indata_len):
+        #iterate all ratings, and see if there's a match
+        search_str0 = str(indata[i][0]) # get the users see if it's in the not-freq users list
+        search_str1 = str(indata[i][1]) # get the products see if it's in the not-freq products list
+        if(search_str0 in target0) or (search_str1 in target1):
+            pass #coz the input list is inactive-users... 
+        else:
+            #keep the freq user data 
+            outdata[i] = indata[i]
+        progress.update(1) #update every 1 percent
+    progress.close()
+    #TODO:still have synchronization bug of showing bars more than the core number with incomplete progress:
+    #progresser #03: 100%|█████████████████████| 10841/10841 [00:08<00:00, 1214.63it/s]
+    #progresser #03:  48%|██████████▌           | 5207/10841 [00:04<00:05, 1051.80it/s]
+    return (i,outdata)
+
+freq_results = [] #global list to collect parallel results
+def collect_result(result):
+    '''
+    combining the parallel outputs into the global list
+    '''
+    global freq_results
+    freq_results.append(result)
+
+def parsing_freq_results():
+    '''
+    @return: 2d np array outdata
+
+    changing the format of global freq_results into a 2d np array
+    '''
+    outdata = []
+    for i in range(len(freq_results)):
+        outdata.append(freq_results[i][1])
+    outdata = np.array(outdata)
+    # print(outdata.shape)
+    outdata = outdata.reshape(outdata.shape[0]*outdata.shape[1], 3)
+    # print(outdata.shape)
+    return outdata
+
 def extract_less_freq(indata, target0, target1, label):
     '''
     @param: 2d np array indata - the [[user, product, rating]] array
@@ -214,19 +293,33 @@ def extract_less_freq(indata, target0, target1, label):
     outdata = np.zeros(indata.shape) #initialize a np array with same size as the original rating file .. TODO: it's not cpp pointers... need to dynamic allocate the size..
     # print("now comparing...",outdata.shape, len(target0), len(target1))
     
-    for i in tqdm(range(indata_len)):
-        #iterate all ratings, and see if there's a match
-        search_str0 = str(indata[i][0]) # get the users see if it's in the not-freq users list
-        search_str1 = str(indata[i][1]) # get the products see if it's in the not-freq products list
-        if(search_str0 in target0) or (search_str1 in target1):
-            pass #coz the input list is inactive-users... 
-        else:
-            #keep the freq user data 
-            outdata[i] = indata[i]
-        # if(i > 10):
-        #     break
-    # print("finish extracted...",outdata.shape, outdata[0:100])
+    # measure time to see how much parallel improves ----> begin
+    # start_time = time.time()
+
+    # parallel ver ------------- 
+    pool = mp.Pool(mp.cpu_count())
+    core_num = mp.cpu_count()
+    indata_splitted = split_dataset(indata, core_num)
+    # ver 1
+    # outdata = [pool.apply(match_freq, args=(row,target0,target1,outdata)) for row in indata_splitted]
+    # ver 2
+    for i, row in enumerate(indata_splitted):
+        pool.apply_async(match_freq2, args=(i, row, target0,target1,outdata), callback=collect_result)
+
+    pool.close()
+    pool.join()
+    print("\n"*(core_num)) #fix bug for tqdm display of somehow missing "\n"...
+    outdata = parsing_freq_results()
+    
+    # sequential ver ------------- 
+    # outdata = match_freq(indata,target0,target1,outdata)
+    
+    # measure time to see how much parallel improves ----> end
+    # elapsed_time = time.time() - start_time
+    # print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)), "- time for match_freq()")
+    
     outdata = rm_zeros(outdata) #TODO: maybe only get the index...
+    print("the extracted subset contains: ",outdata.shape)
     todisk_csv(outdata, "dataset/extracted/extracted_"+str(label)) #save the file now locally
     todisk_bin(outdata, "dataset/extracted/extracted_"+str(label))
     
