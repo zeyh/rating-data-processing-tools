@@ -1,4 +1,4 @@
 *.csv
 *.bin
 __pycache__/
-
+nohup.out
