@@ -7,6 +7,7 @@ Aug 21, 19
 '''
 
 import os, sys, io
+import shutil
 import csv
 import binascii
 import struct
@@ -22,6 +23,15 @@ from sklearn.feature_extraction.text import CountVectorizer
 from tqdm import tqdm
 import multiprocessing as mp
 import time
+
+def copy_file(src, dst):
+    '''
+    @param: string src -> "dataset/test1.bin"
+            string dst -> "dataset/extracted/extracted_0.bin"
+    copy file in src to dst
+    '''
+    shutil.copy(src, dst)
+
 
 def take_arg(num):
     '''
@@ -272,9 +282,9 @@ def parsing_freq_results():
     for i in range(len(freq_results)):
         outdata.append(freq_results[i][1])
     outdata = np.array(outdata)
-    # print(outdata.shape)
+    print(outdata.shape)
     outdata = outdata.reshape(outdata.shape[0]*outdata.shape[1], 3)
-    # print(outdata.shape)
+    print(outdata.shape)
     return outdata
 
 def extract_less_freq(indata, target0, target1, label):
@@ -291,7 +301,7 @@ def extract_less_freq(indata, target0, target1, label):
     indata_len = indata.shape[0] #overall rows 
 
     outdata = np.zeros(indata.shape) #initialize a np array with same size as the original rating file .. TODO: it's not cpp pointers... need to dynamic allocate the size..
-    # print("now comparing...",outdata.shape, len(target0), len(target1))
+    print("now comparing...",outdata.shape, len(target0), len(target1))
     
     # measure time to see how much parallel improves ----> begin
     # start_time = time.time()
@@ -310,7 +320,7 @@ def extract_less_freq(indata, target0, target1, label):
     pool.join()
     print("\n"*(core_num)) #fix bug for tqdm display of somehow missing "\n"...
     outdata = parsing_freq_results()
-    
+    freq_results.clear() #fix bug for not deleting allocation
     # sequential ver ------------- 
     # outdata = match_freq(indata,target0,target1,outdata)
     
@@ -515,11 +525,12 @@ def extract_denser(filepath, thresh, label):
     my_data = my_data.reshape(int(my_data.shape[0]/3), 3)
     users = my_data[:,0]
     products = my_data[:,1]
-
+    # ascii_histogram(users)
     #findout the frequency of each one
     products_freq = most_common_frequency(products)
     users_freq = most_common_frequency(users)
     print("freq found.")
+    
     #get the less frequency item that will be filtered out later
     products_notfreq = single_freq_threshold(products_freq, thresh)
     users_notfreq = single_freq_threshold(users_freq, thresh)
