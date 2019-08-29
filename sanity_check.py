@@ -5,8 +5,8 @@ read in a file and print out
     distinct items in each column, sparsity
 !all assuming in int32 (4 byte int)
 
->> $ python3 sanity_check.py dataset/storage/extracted_0.csv
-
+run >> $ python3 sanity_check.py dataset/storage/extracted_0.csv
+will get outputs like:
 (10775085, 3)
 row sample:  [ 1 29  7] [ 1 32  7]
 min/max value in column 0 :  1   138493
