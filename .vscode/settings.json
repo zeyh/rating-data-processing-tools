@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "iosfwd": "cpp",
+        "vector": "cpp",
+        "limits": "cpp",
+        "string": "cpp",
+        "ios": "cpp",
+        "iterator": "cpp",
+        "__tree": "cpp",
+        "bitset": "cpp",
+        "set": "cpp",
+        "fstream": "cpp",
+        "ostream": "cpp"
+    }
+}

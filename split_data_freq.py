@@ -19,7 +19,7 @@ def main():
     for i in range(5):
         src_filepath = filepath[0] + str(i)
         print("now split subset #",i, "with file ", src_filepath, 100+100*pow(i,1))
-        extract_denser(src_filepath, 10+10*pow(i,1), i+1)
+        extract_denser(src_filepath, 100+100*pow(i,3), i+1)
         print("------------------")
 
     print("fin")
