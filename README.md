@@ -78,6 +78,7 @@ from func import *
 ## Datasets
 The datasets for which some functions are written:
 | Name                                                                                                          | Rating scale  | Number of ratings |  Number of users (1st column) | Number of products(2nd column) | Sparsity     | 
+| ---------------------------------------------------------------------------------- |:---------------:|:--------------------:|:-----------------------------------:|:--------------------------------------:|:------------:|
 | [Netflix Prize](https://www.kaggle.com/netflix-inc/netflix-prize-data)        |    1-5             | 100480507            | 480189                                      | 17770                                            | 98.8224% |    
 
 
