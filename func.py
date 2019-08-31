@@ -759,3 +759,11 @@ def read_npz(filename):
     return datain
 
 
+| :---  :                                                                                                              |     :---:           |   :---:                     |          ---:               |       ---:                     |       ---:    |   
+| [Movielen-1m](https://grouplens.org/datasets/movielens/)                     | 1-5                | 1000209               |6040                       |3706                        |95.5316%|            
+| :---  :                                                                                                              |     :---:           |   :---:                     |          ---:               |       ---:                     |       ---:    |      
+| [Movielen-20m](https://grouplens.org/datasets/movielens/)                   | 1-10              | 20000263             |138493                  |26744                       |99.4600%|          
+| :--- :                                                                                                               |     :---:           |   :---:                     |          ---:               |       ---:                     |       ---:    |    
+| [Book-Crossing](http://www2.informatik.uni-freiburg.de/~cziegler/BX/) | 1-10              | 433667                 |77803                     |185969                    |99.9970%|            
+| :---                                                                                                              |     :---:           |   :---:                     |          ---:               |       ---:                     |       ---:    |       
+| [Amazon Books](http://jmcauley.ucsd.edu/data/amazon/links.html)       | 1-5               | 22507154             |8026324                  |2330066                  |99.9999%|      

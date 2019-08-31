@@ -21,7 +21,7 @@ from func import *
 ```
 * to load a dataset:
     * to load as numpy array:
-        read_bin(filename),  read_csv(filename),  read_npz(filename),  read_dat(filename)
+        read_bin(filename),  read_csv(filename),  read_npz(filename),  read_dat(filename) \n
     * to load a csv file as vector<string>:
         loadcsv(filename) as concatenate string for each row 
     * to load a single column in csv file as vector<string>:
@@ -59,10 +59,9 @@ from func import *
 
 * to get a subset of data which only contains all the ratings with users and products appear more than a frequency_threshold number of times:
      extract_denser(input_file_path, frequency_threshold, output_file_label)
-     note:  
-        1. this function will use all your cpu cores in parallel
-        2. the progress bar display still have synchronization issues which will show a few repeated bars and remain incomplete even though it is actually complete... so just watch for the majority bars' progress report...
-        3. it will automatically save the output file as "dataset/extracted/extracted_#.bin" and "dataset/extracted/extracted_#.csv" (# is the output_file_label you entered), so make sure the "dataset/extracted/" path existed first
+    * this function will use all your cpu cores in parallel
+    * the progress bar display still have synchronization issues which will show a few repeated bars and remain incomplete even though it is actually complete... so just watch for the majority bars' progress report...
+    * it will automatically save the output file as "dataset/extracted/extracted_#.bin" and "dataset/extracted/extracted_#.csv" (# is the output_file_label you entered), so make sure the "dataset/extracted/" path existed first
 
 * to check if an integer id list is consecutive or not:
     * check_continous( 1d_np_array)
@@ -78,17 +77,9 @@ from func import *
 
 ## Datasets
 The datasets for which some functions are written:
-| Name                                                                                                          | Rating scale | Number of ratings | Number of users (1st column) | Number of products(2nd column) | Sparsity  | 
-| :---                                                                                                              |     :---:           |   :---:                     |          ---:               |       ---:                     |       ---:    |       
-| [Netflix Prize](https://www.kaggle.com/netflix-inc/netflix-prize-data)     |   1-5              |100480507            |  480189                 | 17770                      | 98.8224%|        
-| :---                                                                                                              |     :---:           |   :---:                     |          ---:               |       ---:                     |       ---:    |   
-| [Movielen-1m](https://grouplens.org/datasets/movielens/)                     | 1-5                | 1000209               |6040                       |3706                        |95.5316%|            
-| :---                                                                                                              |     :---:           |   :---:                     |          ---:               |       ---:                     |       ---:    |      
-| [Movielen-20m](https://grouplens.org/datasets/movielens/)                   | 1-10              | 20000263             |138493                  |26744                       |99.4600%|          
-| :---                                                                                                              |     :---:           |   :---:                     |          ---:               |       ---:                     |       ---:    |    
-| [Book-Crossing](http://www2.informatik.uni-freiburg.de/~cziegler/BX/) | 1-10              | 433667                 |77803                     |185969                    |99.9970%|            
-| :---                                                                                                              |     :---:           |   :---:                     |          ---:               |       ---:                     |       ---:    |       
-| [Amazon Books](http://jmcauley.ucsd.edu/data/amazon/links.html)       | 1-5               | 22507154             |8026324                  |2330066                  |99.9999%|      
+| Name                                                                                                          | Rating scale  | Number of ratings |  Number of users (1st column) | Number of products(2nd column) | Sparsity     | 
+| [Netflix Prize](https://www.kaggle.com/netflix-inc/netflix-prize-data)        |    1-5             | 100480507            | 480189                                      | 17770                                            | 98.8224% |    
+
 
 ### To know basic info for a new dataset in the format of csv / bin / dat / npz, run:
 ```
@@ -99,6 +90,6 @@ Citations for Book-Crossing Dataset:
 > Improving Recommendation Lists Through Topic Diversification,   Cai-Nicolas Ziegler, Sean M. McNee, Joseph A. Konstan, Georg Lausen; Proceedings of the 14th International World Wide Web Conference (WWW '05), May 10-14, 2005, Chiba, Japan.
 
 Citations for Amazon Books Dataset:
-> Ups and downs: Modeling the visual evolution of fashion trends with one-class collaborative filtering,  R. He, J. McAuley,  WWW, 2016
->  Image-based recommendations on styles and substitutes,  J. McAuley, C. Targett, J. Shi, A. van den Hengel,  SIGIR, 2015
+> * Ups and downs: Modeling the visual evolution of fashion trends with one-class collaborative filtering,  R. He, J. McAuley,  WWW, 2016
+>  * Image-based recommendations on styles and substitutes,  J. McAuley, C. Targett, J. Shi, A. van den Hengel,  SIGIR, 2015
 
