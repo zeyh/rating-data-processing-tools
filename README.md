@@ -59,19 +59,19 @@ from func import *
 
 * **to get a subset of data which only contains all the ratings with users and products appear more than a frequency_threshold number of times**:
      extract_denser(input_file_path, frequency_threshold, output_file_label)
-    * *this function will use all your cpu cores in parallel
-    * *the progress bar display still have synchronization issues which will show a few repeated bars and remain incomplete even though it is actually complete... so just watch for the majority bars' progress report...
-    * *it will automatically save the output file as "dataset/extracted/extracted_#.bin" and "dataset/extracted/extracted_#.csv" (# is the output_file_label you entered), so make sure the "dataset/extracted/" path existed first
+    * *this function will use all your cpu cores in parallel*
+    * *the progress bar display still have synchronization issues which will show a few repeated bars and remain incomplete even though it is actually complete... so just watch for the majority bars' progress report...*
+    * *it will automatically save the output file as "dataset/extracted/extracted_#.bin" and "dataset/extracted/extracted_#.csv" (# is the output_file_label you entered), so make sure the "dataset/extracted/" path existed first*
 
 * **to check if an integer id list is consecutive or not**:
     * check_continous( 1d_np_array)
     * to map a dataset with non-consecutive user/product indeces to be consecutive from 1 to the max distinct user/product length:
         reordering(2d_np_array)
 
-* **to output a list of non-repeated distinct users/products list:
+* **to output a list of non-repeated distinct users/products list**:
      count_distinct(vector<string> users)
 
-* **to replace the strings indicating the user/product to be integer IDs:
+* **to replace the strings indicating the user/product to be integer IDs**:
         map_to_indices(vector<string> distinct_user_list, vector<string> rating_data, double rating_data_size )
 
 
