@@ -80,8 +80,15 @@ The datasets for which some functions are written:
 
 | name    |  scale |  #ratings | #users  |  #products | Sparsity |
 | ------------- | ------------- | ------------- |------------- |------------- |------------- |
-| [Netflix Prize](https://www.kaggle.com/netflix-inc/netflix-prize-data) | 1-5   |
-| 100480507   | 480189  |17770  | 8.8224%  |
+| [Netflix Prize](https://www.kaggle.com/netflix-inc/netflix-prize-data) | 1-5| 100480507   | 480189  |17770  | 98.8224%  |
+| ------------- | ------------- | ------------- |------------- |------------- |------------- |
+| [Movielen-1m](https://grouplens.org/datasets/movielens/)    | 1-5| 1000209   | 6040  |3706  | 95.5316%  |
+| ------------- | ------------- | ------------- |------------- |------------- |------------- |
+| [Movielen-20m](https://grouplens.org/datasets/movielens/)     | 1-10| 20000263   | 138493  |26744  | 99.4600%  |
+| ------------- | ------------- | ------------- |------------- |------------- |------------- |
+| [Book-Crossing](http://www2.informatik.uni-freiburg.de/~cziegler/BX/)  | 1-10| 433667   | 77803  |185969  | 99.9970%  |
+| ------------- | ------------- | ------------- |------------- |------------- |------------- |
+| [Amazon Books](http://jmcauley.ucsd.edu/data/amazon/links.html) | 1-5| 22507154   | 8026324  |2330066  | 99.9999%  |
 
 
 ### To know basic info for a new dataset in the format of csv / bin / dat / npz, run:
