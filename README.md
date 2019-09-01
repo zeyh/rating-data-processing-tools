@@ -79,6 +79,7 @@ from func import *
 The datasets for which some functions are written:
 
 | name    |  scale |  #ratings | #users  |  #products | Sparsity |
+| ------------- |:-------------:| :-------------:|:-------------:|:-------------:|-----:|
 | [Netflix Prize](https://www.kaggle.com/netflix-inc/netflix-prize-data) | 1-5| 100480507   | 480189  |17770  | 98.8224%  |
 | [Movielen-1m](https://grouplens.org/datasets/movielens/)    | 1-5| 1000209   | 6040  |3706  | 95.5316%  |
 | [Movielen-20m](https://grouplens.org/datasets/movielens/)     | 1-10| 20000263   | 138493  |26744  | 99.4600%  |
