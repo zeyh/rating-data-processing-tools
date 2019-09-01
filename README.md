@@ -12,11 +12,6 @@ Before running, make sure to install the libraries below.
 pip3 install numpy scipy pandas matplotlib sklearn tqdm
 ```
 
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
-
 ## Description of some commonly-used functions
 ```python
 from func import *
@@ -82,9 +77,11 @@ from func import *
 
 ## Datasets
 The datasets for which some functions are written:
-| Name                                                                                                          | Rating scale  | Number of ratings |  Number of users (1st column) | Number of products(2nd column) | Sparsity     | 
-| ---------------------------------------------------------------------------------- |:---------------:|:--------------------:|:-----------------------------------:|:--------------------------------------:|:------------:|
-| [Netflix Prize](https://www.kaggle.com/netflix-inc/netflix-prize-data)        |    1-5             | 100480507            | 480189                                      | 17770                                            | 98.8224% |    
+
+| name    |  scale |  #ratings | #users  |  #products | Sparsity |
+| ------------- | ------------- | ------------- |------------- |------------- |------------- |
+| [Netflix Prize](https://www.kaggle.com/netflix-inc/netflix-prize-data) | 1-5   |
+| 100480507   | 480189  |17770  | 8.8224%  |
 
 
 ### To know basic info for a new dataset in the format of csv / bin / dat / npz, run:
