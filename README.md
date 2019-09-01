@@ -16,12 +16,12 @@ pip3 install numpy scipy pandas matplotlib sklearn tqdm
 ```python
 from func import *
 ```
-```
+```cpp
 #include "func.cpp"
 ```
-* to load a dataset:
+* **to load a dataset**:
     * to load as numpy array:
-        read_bin(filename),  read_csv(filename),  read_npz(filename),  read_dat(filename) \n
+        read_bin(filename),  read_csv(filename),  read_npz(filename),  read_dat(filename)
     * to load a csv file as vector<string>:
         loadcsv(filename) as concatenate string for each row 
     * to load a single column in csv file as vector<string>:
@@ -41,13 +41,13 @@ from func import *
     * to only get the differences in two matrix:
         setdiff2d(matrix_a, matrix_b)
         
-* to copy file from source to destination:
+* **to copy file from source to destination**:
         copy_file(src, dst)
         
-* to retrieve the names of a certain type of file in a folder:
+* **to retrieve the names of a certain type of file in a folder**:
         browsefolder(folder_path, file_type)
         
-* to find out the frequency of each distinct items in a numpy list:
+* **to find out the frequency of each distinct items in a numpy list**:
         most_common_frequency(np_array) - return a dictionary which values are the number of frequencies each key appears in the input list
     * to extract only the frequencies:
         extract_frequency(frequency_dictionary)
@@ -57,21 +57,21 @@ from func import *
         plot_hist(1d_np_array) - see how often each individual user rates the product / product being rated
         rating_freq_hist(2d_np_array) - see how many ratings in each rating scale
 
-* to get a subset of data which only contains all the ratings with users and products appear more than a frequency_threshold number of times:
+* **to get a subset of data which only contains all the ratings with users and products appear more than a frequency_threshold number of times**:
      extract_denser(input_file_path, frequency_threshold, output_file_label)
-    * this function will use all your cpu cores in parallel
-    * the progress bar display still have synchronization issues which will show a few repeated bars and remain incomplete even though it is actually complete... so just watch for the majority bars' progress report...
-    * it will automatically save the output file as "dataset/extracted/extracted_#.bin" and "dataset/extracted/extracted_#.csv" (# is the output_file_label you entered), so make sure the "dataset/extracted/" path existed first
+    * *this function will use all your cpu cores in parallel
+    * *the progress bar display still have synchronization issues which will show a few repeated bars and remain incomplete even though it is actually complete... so just watch for the majority bars' progress report...
+    * *it will automatically save the output file as "dataset/extracted/extracted_#.bin" and "dataset/extracted/extracted_#.csv" (# is the output_file_label you entered), so make sure the "dataset/extracted/" path existed first
 
-* to check if an integer id list is consecutive or not:
+* **to check if an integer id list is consecutive or not**:
     * check_continous( 1d_np_array)
     * to map a dataset with non-consecutive user/product indeces to be consecutive from 1 to the max distinct user/product length:
         reordering(2d_np_array)
 
-* to output a list of non-repeated distinct users/products list:
+* **to output a list of non-repeated distinct users/products list:
      count_distinct(vector<string> users)
 
-* to replace the strings indicating the user/product to be integer IDs:
+* **to replace the strings indicating the user/product to be integer IDs:
         map_to_indices(vector<string> distinct_user_list, vector<string> rating_data, double rating_data_size )
 
 
