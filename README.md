@@ -12,6 +12,11 @@ Before running, make sure to install the libraries below.
 pip3 install numpy scipy pandas matplotlib sklearn tqdm
 ```
 
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
 ## Description of some commonly-used functions
 ```python
 from func import *
@@ -88,7 +93,7 @@ python3 sanity_check.py the_path_of_your_dataset
 ```
 
 Citations for Book-Crossing Dataset:
-> Improving Recommendation Lists Through Topic Diversification,   Cai-Nicolas Ziegler, Sean M. McNee, Joseph A. Konstan, Georg Lausen; Proceedings of the 14th International World Wide Web Conference (WWW '05), May 10-14, 2005, Chiba, Japan.
+> * Improving Recommendation Lists Through Topic Diversification,   Cai-Nicolas Ziegler, Sean M. McNee, Joseph A. Konstan, Georg Lausen; Proceedings of the 14th International World Wide Web Conference (WWW '05), May 10-14, 2005, Chiba, Japan.
 
 Citations for Amazon Books Dataset:
 > * Ups and downs: Modeling the visual evolution of fashion trends with one-class collaborative filtering,  R. He, J. McAuley,  WWW, 2016
